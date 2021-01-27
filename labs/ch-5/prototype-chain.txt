@@ -1,0 +1,29 @@
+function Wolf (name) {
+  this.name = name
+}
+
+Wolf.prototype.howl = function () {
+  console.log(this.name + ': awoooooooo')
+}
+
+function Dog (name) {
+  Wolf.call(this, name + ' the dog')
+}
+
+function inherit (proto) {
+  function ChainLink(){}
+  ChainLink.prototype = proto
+  return new ChainLink()
+}
+
+Dog.prototype = inherit(Wolf.prototype)
+
+Dog.prototype.woof = function () {
+  console.log(this.name + ': woof')
+}
+
+const rufus = new Dog('Rufus')
+
+When new Dog('Rufus') is called a new object is created (rufus). That new object is also the this object within the Dog constructor function. The Dog constructor function passes this to Wolf.call.
+
+Using the call method on a function allows the this object of the function being called to be set via the first argument passed to call. So when this is passed to Wolf.call, the newly created object (which is ultimately assigned to rufus) is also referenced via the this object inside the Wolf constructor function. All subsequent arguments passed to call become the function arguments, so the name argument passed to Wolf is "Rufus the dog". The Wolf constructor sets this.name to "Rufus the dog", which means that ultimately rufus.name is set to "Rufus the dog".
